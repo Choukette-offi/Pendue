@@ -35,17 +35,7 @@ public class ControleurLettres implements EventHandler<ActionEvent> {
     public void handle(ActionEvent actionEvent) {
         Button source = (Button) actionEvent.getSource();
         String lettre = source.getText();
-        // Essayer la lettre
-        modelePendu.essayerLettre(lettre);
-        // Mettre à jour l'affichage
-        vuePendu.majAffichage();
-        // Vérifier si la partie est finie
-        if (modelePendu.estGagne()) {
-            vuePendu.popUpMessageGagne().showAndWait();
-            vuePendu.lancePartie();
-        } else if (modelePendu.estPerdu()) {
-            vuePendu.popUpMessagePerdu().showAndWait();
-            vuePendu.lancePartie();
-        }
+        
+        
     }
 }

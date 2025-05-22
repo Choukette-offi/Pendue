@@ -78,6 +78,8 @@ public class Pendu extends Application {
      */ 
     private Button bJouer;
 
+    private BorderPane fenetre;
+
     /**
      * initialise les attributs (créer le modèle, charge les images, crée le chrono ...)
      */
@@ -86,14 +88,14 @@ public class Pendu extends Application {
         this.modelePendu = new MotMystere("/usr/share/dict/french", 3, 10, MotMystere.FACILE, 10);
         this.lesImages = new ArrayList<Image>();
         this.chargerImages("./img");
-        // A terminer d'implementer
+        this.niveaux = Arrays.asList("Facile", "Moyen", "Difficile", "Expert");
     }
 
     /**
      * @return  le graphe de scène de la vue à partir de methodes précédantes
      */
     private Scene laScene(){
-        BorderPane fenetre = new BorderPane();
+        this.fenetre = new BorderPane();
         fenetre.setTop(this.titre());
         fenetre.setCenter(this.panelCentral);
         return new Scene(fenetre, 800, 1000);
@@ -125,6 +127,8 @@ public class Pendu extends Application {
         banniere.setLeft(titre);
         banniere.setStyle("-fx-background-color:rgb(223, 218, 253);");
         banniere.setPadding(new Insets(15));
+        boutonMaison.setOnAction(new RetourAccueil(this.modelePendu, this));
+        boutonInfo.setOnAction(new ControleurInfos(this));
         return banniere;
     }
 
@@ -137,24 +141,59 @@ public class Pendu extends Application {
         // return res;
     // }
 
-    // /**
+    // /**  
      // * @return la fenêtre de jeu avec le mot crypté, l'image, la barre
      // *         de progression et le clavier
      // */
-    // private Pane fenetreJeu(){
-        // A implementer
-        // Pane res = new Pane();
-        // return res;
-    // }
+    private Pane fenetreJeu(){
+        BorderPane res = new BorderPane();
+        VBox vbox = new VBox(20);
+        VBox vbox2 = new VBox(20);
+        ProgressBar pg = new ProgressBar();
+        pg.setProgress(1.0 - (double)this.modelePendu.getNbErreursRestants()/this.modelePendu.getNbErreursMax());
+        pg.setStyle("-fx-accent: rgb(50, 179, 253);");
+        Label mdp = new Label(this.modelePendu.getMotCrypte());
+        this.leNiveau = new Text("Niveau : " + this.niveaux.get(this.modelePendu.getNiveau()));
+        this.leNiveau.setStyle("-fx-font-size: 32px;");
+        mdp.setStyle("-fx-font-size: 32px;");
+        this.dessin = new ImageView(this.lesImages.get(0));
+        vbox.getChildren().addAll(mdp, this.dessin, pg);
+        vbox.setPadding(new Insets(50));
+        vbox2.getChildren().addAll(this.leNiveau);
+        mdp.setTextAlignment(TextAlignment.CENTER);
+        res.setCenter(vbox);
+        res.setRight(vbox2);
+        return res;
+    }
 
     // /**
      // * @return la fenêtre d'accueil sur laquelle on peut choisir les paramètres de jeu
      // */
-    // private Pane fenetreAccueil(){
-        // A implementer    
-        // Pane res = new Pane();
-        // return res;
-    // }
+    private VBox fenetreAccueil(){   
+        VBox res = new VBox(20);
+        VBox tgourp = new VBox(10);
+        this.bJouer = new Button("Lancer une partie");
+        this.bJouer.setOnAction(new ControleurLancerPartie(this.modelePendu, this));
+        RadioButton boutonF =new RadioButton("Facile");
+        RadioButton boutonM =new RadioButton("Moyen");
+        RadioButton boutonD =new RadioButton("Difficile");
+        RadioButton boutonE =new RadioButton("Expert");
+        boutonF.setOnAction(new ControleurNiveau(this.modelePendu));
+        boutonM.setOnAction(new ControleurNiveau(this.modelePendu));
+        boutonD.setOnAction(new ControleurNiveau(this.modelePendu));
+        boutonE.setOnAction(new ControleurNiveau(this.modelePendu));
+        ToggleGroup group = new ToggleGroup();
+        boutonF.setToggleGroup(group);
+        boutonM.setToggleGroup(group);
+        boutonD.setToggleGroup(group);
+        boutonE.setToggleGroup(group);
+        tgourp.getChildren().addAll(boutonF, boutonM, boutonD, boutonE);
+        TitledPane t = new TitledPane("Niveau de difficulté", tgourp);
+        t.setCollapsible(false);
+        res.getChildren().addAll(this.bJouer, t);
+        res.setPadding(new Insets(20));
+        return res;
+    }
 
     /**
      * charge les images à afficher en fonction des erreurs
@@ -169,11 +208,11 @@ public class Pendu extends Application {
     }
 
     public void modeAccueil(){
-        // A implementer
+        this.fenetre.setCenter(this.fenetreAccueil());
     }
     
     public void modeJeu(){
-        // A implementer
+        this.fenetre.setCenter(this.fenetreJeu());
     }
     
     public void modeParametres(){
