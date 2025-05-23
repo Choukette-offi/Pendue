@@ -135,11 +135,10 @@ public class Pendu extends Application {
     // /**
      // * @return le panel du chronomètre
      // */
-    // private TitledPane leChrono(){
-        // A implementer
-        // TitledPane res = new TitledPane();
-        // return res;
-    // }
+    private TitledPane leChrono(){
+        TitledPane res = new TitledPane();
+        return res;
+    }
 
     // /**  
      // * @return la fenêtre de jeu avec le mot crypté, l'image, la barre
@@ -153,6 +152,7 @@ public class Pendu extends Application {
         pg.setProgress(1.0 - (double)this.modelePendu.getNbErreursRestants()/this.modelePendu.getNbErreursMax());
         pg.setStyle("-fx-accent: rgb(50, 179, 253);");
         Label mdp = new Label(this.modelePendu.getMotCrypte());
+        mdp.setTextAlignment(TextAlignment.CENTER);
         this.leNiveau = new Text("Niveau : " + this.niveaux.get(this.modelePendu.getNiveau()));
         this.leNiveau.setStyle("-fx-font-size: 32px;");
         mdp.setStyle("-fx-font-size: 32px;");
@@ -160,7 +160,7 @@ public class Pendu extends Application {
         vbox.getChildren().addAll(mdp, this.dessin, pg);
         vbox.setPadding(new Insets(50));
         vbox2.getChildren().addAll(this.leNiveau);
-        mdp.setTextAlignment(TextAlignment.CENTER);
+        vbox2.setPadding(new Insets(50));
         res.setCenter(vbox);
         res.setRight(vbox2);
         return res;
