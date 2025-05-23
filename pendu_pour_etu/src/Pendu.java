@@ -85,10 +85,13 @@ public class Pendu extends Application {
      */
     @Override
     public void init() {
-        this.modelePendu = new MotMystere("/usr/share/dict/french", 3, 10, MotMystere.FACILE, 10);
+        //this.modelePendu = new MotMystere("/usr/share/dict/french", 3, 10, MotMystere.FACILE, 10);//pour linux
+        this.modelePendu = new MotMystere("C:/Users/tagsm/Desktop/Bureau/Pendue/pendu_pour_etu/dictionnaire de mot windows/mot.txt", 3, 10, MotMystere.FACILE, 10);//pour windows
         this.lesImages = new ArrayList<Image>();
         this.chargerImages("./img");
         this.niveaux = Arrays.asList("Facile", "Moyen", "Difficile", "Expert");
+        this.chrono = new Chronometre();
+        this.pg = new ProgressBar();
     }
 
     /**
@@ -136,21 +139,22 @@ public class Pendu extends Application {
      // * @return le panel du chronomètre
      // */
     private TitledPane leChrono(){
-        TitledPane res = new TitledPane();
-        return res;
+    TitledPane pane = new TitledPane("Chronomètre", this.chrono);
+    pane.setCollapsible(false);
+    return pane;
+
     }
 
     // /**  
      // * @return la fenêtre de jeu avec le mot crypté, l'image, la barre
      // *         de progression et le clavier
      // */
-    private Pane fenetreJeu(){
+    private BorderPane fenetreJeu(){
         BorderPane res = new BorderPane();
         VBox vbox = new VBox(20);
         VBox vbox2 = new VBox(20);
-        ProgressBar pg = new ProgressBar();
-        pg.setProgress(1.0 - (double)this.modelePendu.getNbErreursRestants()/this.modelePendu.getNbErreursMax());
-        pg.setStyle("-fx-accent: rgb(50, 179, 253);");
+        this.pg.setProgress(1.0 - (double)this.modelePendu.getNbErreursRestants()/this.modelePendu.getNbErreursMax());
+        this.pg.setStyle("-fx-accent: rgb(50, 179, 253);");
         Label mdp = new Label(this.modelePendu.getMotCrypte());
         mdp.setTextAlignment(TextAlignment.CENTER);
         this.leNiveau = new Text("Niveau : " + this.niveaux.get(this.modelePendu.getNiveau()));
@@ -158,9 +162,9 @@ public class Pendu extends Application {
         mdp.setStyle("-fx-font-size: 32px;");
         this.dessin = new ImageView(this.lesImages.get(0));
         vbox.getChildren().addAll(mdp, this.dessin, pg);
-        vbox.setPadding(new Insets(50));
-        vbox2.getChildren().addAll(this.leNiveau);
-        vbox2.setPadding(new Insets(50));
+        vbox.setPadding(new Insets(40));
+        vbox2.getChildren().addAll(this.leNiveau, this.leChrono());
+        vbox2.setPadding(new Insets(40));
         res.setCenter(vbox);
         res.setRight(vbox2);
         return res;
@@ -236,8 +240,7 @@ public class Pendu extends Application {
      * @return le chronomètre du jeu
      */
     public Chronometre getChrono(){
-        // A implémenter
-        return null; // A enlever
+        return this.chrono;
     }
 
     public Alert popUpPartieEnCours(){
