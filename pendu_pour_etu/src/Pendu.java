@@ -85,8 +85,8 @@ public class Pendu extends Application {
      */
     @Override
     public void init() {
-        //this.modelePendu = new MotMystere("/usr/share/dict/french", 3, 10, MotMystere.FACILE, 10);//pour linux
-        this.modelePendu = new MotMystere("C:/Users/tagsm/Desktop/Bureau/Pendue/pendu_pour_etu/dictionnaire de mot windows/mot.txt", 3, 10, MotMystere.FACILE, 10);//pour windows
+        this.modelePendu = new MotMystere("/usr/share/dict/french", 3, 10, MotMystere.FACILE, 10);//pour linux
+        //this.modelePendu = new MotMystere("C:/Users/tagsm/Desktop/Bureau/Pendue/pendu_pour_etu/dictionnaire de mot windows/mot.txt", 3, 10, MotMystere.FACILE, 10);//pour windows
         this.lesImages = new ArrayList<Image>();
         this.chargerImages("./img");
         this.niveaux = Arrays.asList("Facile", "Moyen", "Difficile", "Expert");
@@ -160,7 +160,7 @@ public class Pendu extends Application {
         this.leNiveau = new Text("Niveau : " + this.niveaux.get(this.modelePendu.getNiveau()));
         this.leNiveau.setStyle("-fx-font-size: 32px;");
         mdp.setStyle("-fx-font-size: 32px;");
-        this.dessin = new ImageView(this.lesImages.get(0));
+        this.dessin = new ImageView(this.lesImages.get(this.modelePendu.getNbErreursRestants()));
         vbox.getChildren().addAll(mdp, this.dessin, pg);
         vbox.setPadding(new Insets(40));
         vbox2.getChildren().addAll(this.leNiveau, this.leChrono());
