@@ -202,7 +202,7 @@ public class MotMystere {
      * @return le nombre d'erreurs encore autorisées
      */
     public int getNbErreursRestants(){
-        return 5;
+        return this.nbErreursRestantes;
     }
 
     /**
