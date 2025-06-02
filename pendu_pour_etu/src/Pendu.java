@@ -85,13 +85,14 @@ public class Pendu extends Application {
      */
     @Override
     public void init() {
-        //this.modelePendu = new MotMystere("/usr/share/dict/french", 3, 10, MotMystere.FACILE, 10);//pour linux
-        this.modelePendu = new MotMystere("C:/Users/tagsm/Desktop/Bureau/Pendue/pendu_pour_etu/dictionnaire de mot windows/mot.txt", 3, 10, MotMystere.FACILE, 10);//pour windows
+        this.modelePendu = new MotMystere("/usr/share/dict/french", 3, 10, MotMystere.FACILE, 10);//pour linux
+        //this.modelePendu = new MotMystere("C:/Users/tagsm/Desktop/Bureau/Pendue/pendu_pour_etu/dictionnaire de mot windows/mot.txt", 3, 10, MotMystere.FACILE, 10);//pour windows
         this.lesImages = new ArrayList<Image>();
         this.chargerImages("./img");
         this.niveaux = Arrays.asList("Facile", "Moyen", "Difficile", "Expert");
         this.chrono = new Chronometre();
         this.pg = new ProgressBar();
+        this.clavier = new Clavier("ABCDEFGHIJKLMNOPQRSTUVWXYZ", new ControleurLettres(this.modelePendu, this));
     }
 
     /**
@@ -162,8 +163,8 @@ public class Pendu extends Application {
         mdp.setStyle("-fx-font-size: 32px;");
         Button newmot = new Button("Nouveau mot");
         newmot.setOnAction(new ControleurLancerPartie(this.modelePendu, this));
-        this.dessin = new ImageView(this.lesImages.get(this.modelePendu.getNbErreursRestants()));
-        vbox.getChildren().addAll(mdp, this.dessin, pg);
+        this.dessin = new ImageView(this.lesImages.get(this.modelePendu.getNbErreursMax() -this.modelePendu.getNbErreursRestants()));
+        vbox.getChildren().addAll(mdp, this.dessin, pg, this.clavier);
         vbox.setPadding(new Insets(40));
         vbox2.getChildren().addAll(this.leNiveau, this.leChrono(),newmot);
         vbox2.setPadding(new Insets(40));
