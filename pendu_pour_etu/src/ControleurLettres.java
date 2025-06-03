@@ -1,7 +1,10 @@
+import java.util.Optional;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 
 /**
  * Controleur du clavier
@@ -33,9 +36,22 @@ public class ControleurLettres implements EventHandler<ActionEvent> {
      */
     @Override
     public void handle(ActionEvent actionEvent) {
-        Button source = (Button) actionEvent.getSource();
-        char lettre = source.getText().charAt(0);
-        this.modelePendu.essaiLettre(lettre);
-        this.vuePendu.majAffichage();
+        Button btn = (Button) actionEvent.getSource();
+        String nomDubouton = btn.getText();
+        char lettre = nomDubouton.charAt(0);
+        System.out.println(lettre);
+        modelePendu.essaiLettre(lettre);
+        vuePendu.majAffichage();
+        if(modelePendu.gagne()){
+            Optional<ButtonType> reponse = this.vuePendu.popUpMessageGagne().showAndWait(); // on lance la fenêtre popup et on attends la réponse
+            System.out.println("Gagné");
+        }
+        else{
+            if(modelePendu.perdu()){
+            Optional<ButtonType> reponse = this.vuePendu.popUpMessagePerdu().showAndWait(); // on lance la fenêtre popup et on attends la réponse
+            System.out.println("Perdu");
+
+        }
+        }
     }
 }

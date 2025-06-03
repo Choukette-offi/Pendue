@@ -13,8 +13,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.control.ButtonBar.ButtonData ;
 
-import java.util.List;
-import java.util.Arrays;
+import java.util.*;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -92,7 +91,8 @@ public class Pendu extends Application {
         this.niveaux = Arrays.asList("Facile", "Moyen", "Difficile", "Expert");
         this.chrono = new Chronometre();
         this.pg = new ProgressBar();
-        this.clavier = new Clavier("ABCDEFGHIJKLMNOPQRSTUVWXYZ",this,modelePendu, new ControleurLettres(this.modelePendu, this));
+        this.clavier = new Clavier("ABCDEFGHIJKLMNOPQRSTUVWXYZ", new ControleurLettres(this.modelePendu, this), 7);
+        this.leNiveau = new Text();
     }
 
     /**
@@ -154,18 +154,13 @@ public class Pendu extends Application {
         BorderPane res = new BorderPane();
         VBox vbox = new VBox(20);
         VBox vbox2 = new VBox(20);
-        this.pg.setProgress(1.0 - (double)this.modelePendu.getNbErreursRestants()/this.modelePendu.getNbErreursMax());
         this.pg.setStyle("-fx-accent: rgb(50, 179, 253);");
-        Label mdp = new Label(this.modelePendu.getMotCrypte());
-        mdp.setTextAlignment(TextAlignment.CENTER);
-        this.leNiveau = new Text("Niveau : " + this.niveaux.get(this.modelePendu.getNiveau()));
+        this.motCrypte.setTextAlignment(TextAlignment.CENTER);
         this.leNiveau.setStyle("-fx-font-size: 32px;");
-        mdp.setStyle("-fx-font-size: 32px;");
+        this.motCrypte.setStyle("-fx-font-size: 32px;");
         Button newmot = new Button("Nouveau mot");
         newmot.setOnAction(new ControleurLancerPartie(this.modelePendu, this));
-        this.dessin = new ImageView(this.lesImages.get(this.modelePendu.getNbErreursMax() -this.modelePendu.getNbErreursRestants()));
-        this.clavier.desactiveTouches(this.modelePendu.getLettresEssayees());
-        vbox.getChildren().addAll(mdp, this.dessin, pg, this.clavier);
+        vbox.getChildren().addAll(this.motCrypte, this.dessin, pg, this.clavier);
         vbox.setPadding(new Insets(40));
         vbox2.getChildren().addAll(this.leNiveau, this.leChrono(),newmot);
         vbox2.setPadding(new Insets(40));
@@ -229,23 +224,26 @@ public class Pendu extends Application {
 
     /** lance une partie */
     public void lancePartie(){
-        this.modelePendu.setNiveau(MotMystere.FACILE);
-        this.modelePendu.setMotATrouver();
-        this.chrono.resetTime();
-        this.chrono.start();
-        this.motCrypte = new Text(this.modelePendu.getMotCrypte());
-        this.clavier.desactiveTouches(this.modelePendu.getLettresEssayees());
+        this.modelePendu = new MotMystere("/usr/share/dict/french", 3, 10,modelePendu.getNiveau(), 10);
+        this.dessin= new ImageView(new Image("../img/pendu0.png"));
+        this.pg = new ProgressBar();
+        this.chrono = new Chronometre();
+        this.clavier= new Clavier("ABCDEFGHIJKLMNOPQRSTUVWXYZ",new ControleurLettres(modelePendu, this), 7);
+        this.leNiveau.setText("Niveau "+ niveaux.get(modelePendu.getNiveau()));
+        this.pg = new ProgressBar(0);
+        motCrypte = new Text(modelePendu.getMotCrypte());
         this.modeJeu();
     }
 
     /**
-     * raffraichit l'affichage selon les données du modèle
-     */
+     
+
+    raffraichit l'affichage selon les données du modèle*/
     public void majAffichage(){
-        this.motCrypte = new Text(this.modelePendu.getMotCrypte());
-        this.chrono.resetTime();
-        this.chrono.start();
-        this.modeJeu();
+        this.motCrypte.setText(this.modelePendu.getMotCrypte());
+        this.dessin.setImage( new Image("/pendu"+(this.modelePendu.getNbErreursMax()-this.modelePendu.getNbErreursRestants())+".png"));
+        this.pg.setProgress(1.0-(double)this.modelePendu.getNbErreursRestants()/this.modelePendu.getNbErreursMax());
+        clavier.desactiveTouches(modelePendu.getLettresEssayees());
     }
 
     /**
@@ -263,20 +261,31 @@ public class Pendu extends Application {
     }
         
     public Alert popUpReglesDuJeu(){
-        // A implementer
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         return alert;
     }
     
     public Alert popUpMessageGagne(){
-        // A implementer
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);        
+        Alert alert = new Alert(Alert.AlertType.INFORMATION,"Ouiiiiiiiiiiii"); 
+        Set<String> ttLettres = new HashSet<>();
+            String alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            for(char lettreAlpha : alpha.toCharArray()){
+            ttLettres.add(lettreAlpha+"");}
+            this.clavier.desactiveTouches(ttLettres);
+        alert.setHeaderText(null);
+        alert.setTitle("Gagné !! ");
         return alert;
     }
-    
+
     public Alert popUpMessagePerdu(){
-        // A implementer    
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION,"Perdu"); 
+        Set<String> ttLettres = new HashSet<>();
+            String alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            for(char lettreAlpha : alpha.toCharArray()){
+            ttLettres.add(lettreAlpha+"");}
+            this.clavier.desactiveTouches(ttLettres);
+        alert.setHeaderText(null);
+        alert.setTitle("Gagné !! ");
         return alert;
     }
 

@@ -14,9 +14,6 @@ import java.util.Set;
  */
 public class Clavier extends TilePane {
 
-    private Pendu vuePendu; 
-    private MotMystere modelePendu;
-
     /**
      * il est conseillé de stocker les touches dans un ArrayList
      */
@@ -27,12 +24,10 @@ public class Clavier extends TilePane {
      * @param touches une chaine de caractères qui contient les lettres à mettre sur les touches
      * @param actionTouches le contrôleur des touches
      */
-    public Clavier(String touches,Pendu vuePende, MotMystere modelePendu, EventHandler<ActionEvent> actionTouches) {
+    public Clavier(String touches, EventHandler<ActionEvent> actionTouches, int tailleLigne) {
         this.clavier = new ArrayList<>();
-        this.vuePendu = vuePende;
-        this.modelePendu = modelePendu;
         // Configuration du TilePane
-        this.setPrefColumns(6); // 6 colonnes par ligne
+        this.setPrefColumns(tailleLigne); // 6 colonnes par ligne
         this.setHgap(5);
         this.setVgap(5);
         this.setPadding(new Insets(10));
@@ -42,7 +37,7 @@ public class Clavier extends TilePane {
             Button bouton = new Button(String.valueOf(lettre));
             bouton.setPrefSize(40, 40);
             bouton.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
-            bouton.setOnAction(new ControleurLettres(modelePendu, vuePendu));
+            bouton.setOnAction(actionTouches);
             this.clavier.add(bouton);
             this.getChildren().add(bouton);
         }
