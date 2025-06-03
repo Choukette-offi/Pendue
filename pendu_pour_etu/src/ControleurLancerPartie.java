@@ -34,8 +34,7 @@ public class ControleurLancerPartie implements EventHandler<ActionEvent> {
     public void handle(ActionEvent actionEvent) {
         Button source = (Button) actionEvent.getSource();
         if(source.getText().contains("Lancer")){
-            this.vuePendu.modeJeu();
-            this.vuePendu.getChrono().start(); 
+            this.vuePendu.lancePartie();;
         }
         else{
            Optional<ButtonType> reponse = this.vuePendu.popUpPartieEnCours().showAndWait(); // on lance la fenêtre popup et on attends la réponse

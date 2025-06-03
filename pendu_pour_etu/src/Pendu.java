@@ -92,7 +92,7 @@ public class Pendu extends Application {
         this.niveaux = Arrays.asList("Facile", "Moyen", "Difficile", "Expert");
         this.chrono = new Chronometre();
         this.pg = new ProgressBar();
-        this.clavier = new Clavier("ABCDEFGHIJKLMNOPQRSTUVWXYZ", new ControleurLettres(this.modelePendu, this));
+        this.clavier = new Clavier("ABCDEFGHIJKLMNOPQRSTUVWXYZ",this,modelePendu, new ControleurLettres(this.modelePendu, this));
     }
 
     /**
@@ -164,6 +164,7 @@ public class Pendu extends Application {
         Button newmot = new Button("Nouveau mot");
         newmot.setOnAction(new ControleurLancerPartie(this.modelePendu, this));
         this.dessin = new ImageView(this.lesImages.get(this.modelePendu.getNbErreursMax() -this.modelePendu.getNbErreursRestants()));
+        this.clavier.desactiveTouches(this.modelePendu.getLettresEssayees());
         vbox.getChildren().addAll(mdp, this.dessin, pg, this.clavier);
         vbox.setPadding(new Insets(40));
         vbox2.getChildren().addAll(this.leNiveau, this.leChrono(),newmot);
@@ -228,14 +229,23 @@ public class Pendu extends Application {
 
     /** lance une partie */
     public void lancePartie(){
-        // A implementer
+        this.modelePendu.setNiveau(MotMystere.FACILE);
+        this.modelePendu.setMotATrouver();
+        this.chrono.resetTime();
+        this.chrono.start();
+        this.motCrypte = new Text(this.modelePendu.getMotCrypte());
+        this.clavier.desactiveTouches(this.modelePendu.getLettresEssayees());
+        this.modeJeu();
     }
 
     /**
      * raffraichit l'affichage selon les données du modèle
      */
     public void majAffichage(){
-        // A implementer
+        this.motCrypte = new Text(this.modelePendu.getMotCrypte());
+        this.chrono.resetTime();
+        this.chrono.start();
+        this.modeJeu();
     }
 
     /**

@@ -27,9 +27,10 @@ public class Clavier extends TilePane {
      * @param touches une chaine de caractères qui contient les lettres à mettre sur les touches
      * @param actionTouches le contrôleur des touches
      */
-    public Clavier(String touches, EventHandler<ActionEvent> actionTouches) {
+    public Clavier(String touches,Pendu vuePende, MotMystere modelePendu, EventHandler<ActionEvent> actionTouches) {
         this.clavier = new ArrayList<>();
-
+        this.vuePendu = vuePende;
+        this.modelePendu = modelePendu;
         // Configuration du TilePane
         this.setPrefColumns(6); // 6 colonnes par ligne
         this.setHgap(5);

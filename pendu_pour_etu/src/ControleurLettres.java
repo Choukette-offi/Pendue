@@ -34,9 +34,8 @@ public class ControleurLettres implements EventHandler<ActionEvent> {
     @Override
     public void handle(ActionEvent actionEvent) {
         Button source = (Button) actionEvent.getSource();
-        String lettre = source.getText();
-        
-        
-        
+        char lettre = source.getText().charAt(0);
+        this.modelePendu.essaiLettre(lettre);
+        this.vuePendu.majAffichage();
     }
 }
