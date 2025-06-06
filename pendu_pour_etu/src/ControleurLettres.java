@@ -39,7 +39,6 @@ public class ControleurLettres implements EventHandler<ActionEvent> {
         Button btn = (Button) actionEvent.getSource();
         String nomDubouton = btn.getText();
         char lettre = nomDubouton.charAt(0);
-        System.out.println(lettre);
         modelePendu.essaiLettre(lettre);
         vuePendu.majAffichage();
         if(modelePendu.gagne()){

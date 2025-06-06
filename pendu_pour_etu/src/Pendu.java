@@ -15,7 +15,6 @@ import javafx.scene.control.ButtonBar.ButtonData ;
 
 import java.util.*;
 import java.io.File;
-import java.util.ArrayList;
 
 
 /**
@@ -159,6 +158,10 @@ public class Pendu extends Application {
         this.leNiveau.setStyle("-fx-font-size: 32px;");
         this.motCrypte.setStyle("-fx-font-size: 32px;");
         Button newmot = new Button("Nouveau mot");
+        this.boutonParametres.setDisable(true);
+        this.boutonParametres.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-background-color: #cccccc;");
+        boutonMaison.setDisable(false);
+        boutonMaison.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-background-color: #ffffff;");
         newmot.setOnAction(new ControleurLancerPartie(this.modelePendu, this));
         vbox.getChildren().addAll(this.motCrypte, this.dessin, pg, this.clavier);
         vbox.setPadding(new Insets(40));
@@ -186,6 +189,10 @@ public class Pendu extends Application {
         boutonD.setOnAction(new ControleurNiveau(this.modelePendu));
         boutonE.setOnAction(new ControleurNiveau(this.modelePendu));
         ToggleGroup group = new ToggleGroup();
+        this.boutonMaison.setDisable(true);
+        this.boutonMaison.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-background-color: #cccccc;");
+        boutonParametres.setDisable(false);
+        boutonParametres.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-background-color: #ffffff;");
         boutonF.setToggleGroup(group);
         boutonM.setToggleGroup(group);
         boutonD.setToggleGroup(group);
@@ -278,7 +285,7 @@ public class Pendu extends Application {
     }
 
     public Alert popUpMessagePerdu(){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION,"Perdu"); 
+        Alert alert = new Alert(Alert.AlertType.INFORMATION,"Perdu le mot était : "+this.modelePendu.getMotATrouve()); 
         Set<String> ttLettres = new HashSet<>();
             String alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             for(char lettreAlpha : alpha.toCharArray()){
