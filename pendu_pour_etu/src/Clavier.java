@@ -52,13 +52,11 @@ public class Clavier extends TilePane {
             String texteBouton = bouton.getText();
 
             if (touchesDesactivees.contains(texteBouton)) {
-                // Désactiver le bouton
-                bouton.setDisable(true);
-                bouton.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-background-color: #cccccc;");
+                bouton.setDisable(true); // Le style grisé est automatique
+                bouton.setStyle("");     // Supprime tout style forcé
             } else {
-                // Activer le bouton
                 bouton.setDisable(false);
-                bouton.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-background-color: #ffffff;");
+                bouton.setStyle("");     // Restaure le style d'origine
             }
         }
     }

@@ -26,17 +26,27 @@ public class Chronometre extends Text{
 
     /**
      * Constructeur permettant de créer le chronomètre
-     * avec un label initialisé à "0:0:0"
-     * Ce constructeur créer la Timeline, la KeyFrame et le contrôleur
+     * avec un label initialisé à "02:00"
+     * Ce constructeur crée la Timeline, la KeyFrame et le contrôleur
      */
+    private long tempsRestant = 120_000; // 2 minutes en millisecondes
+
     public Chronometre(){
-        this.setText("0:0"); 
+        this.setText("02min 00s"); 
         this.setFont(new Font("Arial", 24)); 
         this.setTextAlignment(TextAlignment.CENTER); 
         this.actionTemps = new ControleurChronometre(this);
-        this.keyFrame = new KeyFrame(Duration.seconds(1), this.actionTemps);
+        this.keyFrame = new KeyFrame(Duration.seconds(1), e -> {
+            tempsRestant -= 1000;
+            if (tempsRestant <= 0) {
+                tempsRestant = 0;
+                this.timeline.stop();
+            }
+            setTime(tempsRestant);
+        });
         this.timeline = new Timeline(this.keyFrame);
         this.timeline.setCycleCount(Animation.INDEFINITE); 
+        setTime(tempsRestant);
     }
 
     /**
@@ -48,7 +58,7 @@ public class Chronometre extends Text{
         long secondes = tempsMillisec / 1000;
         long minutes = secondes / 60;
         secondes = secondes % 60;
-            this.setText(minutes + ":" + secondes);
+            this.setText(minutes + "min" + secondes + "s");
     }
 
     /**
@@ -56,21 +66,13 @@ public class Chronometre extends Text{
      */
     public void start(){
         this.actionTemps.reset(); // Pour éviter un saut de temps
-        this.timeline.play();
     }
-
     /**
-     * Permet d'arrêter le chronomètre
-     */
-    public void stop(){
-        this.timeline.stop();
-    }
-
-    /**
-     * Permet de remettre le chronomètre à 0
+     * Permet de remettre le chronomètre à 2 minutes
      */
     public void resetTime(){
         this.timeline.stop();
-        this.actionTemps.reset();
+        this.tempsRestant = 120_000;
+        setTime(tempsRestant);
     }
 }

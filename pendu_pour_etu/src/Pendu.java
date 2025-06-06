@@ -83,8 +83,8 @@ public class Pendu extends Application {
      */
     @Override
     public void init() {
-        this.modelePendu = new MotMystere("/usr/share/dict/french", 3, 10, MotMystere.FACILE, 10);//pour linux
-        //this.modelePendu = new MotMystere("C:/Users/tagsm/Desktop/Bureau/Pendue/pendu_pour_etu/dictionnaire de mot windows/mot.txt", 3, 10, MotMystere.FACILE, 10);//pour windows
+        //this.modelePendu = new MotMystere("/usr/share/dict/french", 3, 10, MotMystere.FACILE, 10);//pour linux
+        this.modelePendu = new MotMystere("C:/Users/tagsm/Desktop/Bureau/Pendue/pendu_pour_etu/dictionnaire de mot windows/mot.txt", 3, 10, MotMystere.FACILE, 10);//pour windows
         this.lesImages = new ArrayList<Image>();
         this.chargerImages("./img");
         this.niveaux = Arrays.asList("Facile", "Moyen", "Difficile", "Expert");
@@ -158,10 +158,10 @@ public class Pendu extends Application {
         this.leNiveau.setStyle("-fx-font-size: 32px;");
         this.motCrypte.setStyle("-fx-font-size: 32px;");
         Button newmot = new Button("Nouveau mot");
+        this.boutonMaison.setDisable(false);
+        this.boutonMaison.setStyle("");
         this.boutonParametres.setDisable(true);
-        this.boutonParametres.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-background-color: #cccccc;");
-        boutonMaison.setDisable(false);
-        boutonMaison.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-background-color: #ffffff;");
+        this.boutonParametres.setStyle("");
         newmot.setOnAction(new ControleurLancerPartie(this.modelePendu, this));
         vbox.getChildren().addAll(this.motCrypte, this.dessin, pg, this.clavier);
         vbox.setPadding(new Insets(40));
@@ -190,9 +190,9 @@ public class Pendu extends Application {
         boutonE.setOnAction(new ControleurNiveau(this.modelePendu));
         ToggleGroup group = new ToggleGroup();
         this.boutonMaison.setDisable(true);
-        this.boutonMaison.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-background-color: #cccccc;");
+        this.boutonMaison.setStyle("");
         boutonParametres.setDisable(false);
-        boutonParametres.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-background-color: #ffffff;");
+        boutonParametres.setStyle("");
         boutonF.setToggleGroup(group);
         boutonM.setToggleGroup(group);
         boutonD.setToggleGroup(group);
@@ -231,7 +231,8 @@ public class Pendu extends Application {
 
     /** lance une partie */
     public void lancePartie(){
-        this.modelePendu = new MotMystere("/usr/share/dict/french", 3, 10,modelePendu.getNiveau(), 10);
+        //this.modelePendu = new MotMystere("/usr/share/dict/french", 3, 10,modelePendu.getNiveau(), 10);//linux
+        this.modelePendu = new MotMystere("C:/Users/tagsm/Desktop/Bureau/Pendue/pendu_pour_etu/dictionnaire de mot windows/mot.txt", 3, 10,modelePendu.getNiveau(), 10);//windows
         this.dessin= new ImageView(new Image("../img/pendu0.png"));
         this.pg = new ProgressBar();
         this.chrono = new Chronometre();
@@ -269,32 +270,38 @@ public class Pendu extends Application {
         
     public Alert popUpReglesDuJeu(){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText("Règle du Jeux!!!");
+        alert.setContentText("Le jeu du Pendu consiste à deviner un mot caché en proposant des lettres une par une.\n Chaque bonne lettre est révélée, tandis qu'une mauvaise ajoute \n une partie au dessin du pendu. \n Le joueur gagne s’il trouve le mot avant que le dessin soit complet.");
         return alert;
     }
     
-    public Alert popUpMessageGagne(){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION,"Ouiiiiiiiiiiii"); 
-        Set<String> ttLettres = new HashSet<>();
-            String alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            for(char lettreAlpha : alpha.toCharArray()){
-            ttLettres.add(lettreAlpha+"");}
-            this.clavier.desactiveTouches(ttLettres);
-        alert.setHeaderText(null);
-        alert.setTitle("Gagné !! ");
-        return alert;
+    public Alert popUpMessageGagne() {
+    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    alert.setTitle("Jeu du Pendu");
+    alert.setHeaderText("Vous avez gagné :)");
+    alert.setContentText("Bravo ! Vous avez gagné !");
+    Set<String> ttLettres = new HashSet<>();
+    String alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    for (char lettreAlpha : alpha.toCharArray()) {
+        ttLettres.add(String.valueOf(lettreAlpha));
     }
+    this.clavier.desactiveTouches(ttLettres);
+    return alert;
+}
 
-    public Alert popUpMessagePerdu(){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION,"Perdu le mot était : "+this.modelePendu.getMotATrouve()); 
-        Set<String> ttLettres = new HashSet<>();
-            String alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            for(char lettreAlpha : alpha.toCharArray()){
-            ttLettres.add(lettreAlpha+"");}
-            this.clavier.desactiveTouches(ttLettres);
-        alert.setHeaderText(null);
-        alert.setTitle("Gagné !! ");
-        return alert;
+    public Alert popUpMessagePerdu() {
+    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    alert.setTitle("Jeu du Pendu"); 
+    alert.setHeaderText("Vous avez perdu :("); 
+    alert.setContentText("Le mot était : " + this.modelePendu.getMotATrouve() + "\nDommage ! Vous ferez mieux la prochaine fois !");
+    Set<String> ttLettres = new HashSet<>();
+    String alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    for (char lettreAlpha : alpha.toCharArray()) {
+        ttLettres.add(String.valueOf(lettreAlpha));
     }
+    this.clavier.desactiveTouches(ttLettres);
+    return alert;
+}
 
     /**
      * créer le graphe de scène et lance le jeu
