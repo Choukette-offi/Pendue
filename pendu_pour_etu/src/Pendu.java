@@ -83,8 +83,8 @@ public class Pendu extends Application {
      */
     @Override
     public void init() {
-        //this.modelePendu = new MotMystere("/usr/share/dict/french", 3, 10, MotMystere.FACILE, 10);//pour linux
-        this.modelePendu = new MotMystere("C:/Users/tagsm/Desktop/Bureau/Pendue/pendu_pour_etu/dictionnaire de mot windows/mot.txt", 3, 10, MotMystere.FACILE, 10);//pour windows
+        this.modelePendu = new MotMystere("/usr/share/dict/french", 3, 10, MotMystere.FACILE, 10);//pour linux
+        //this.modelePendu = new MotMystere("C:/Users/tagsm/Desktop/Bureau/Pendue/pendu_pour_etu/dictionnaire de mot windows/mot.txt", 3, 10, MotMystere.FACILE, 10);//pour windows
         this.lesImages = new ArrayList<Image>();
         this.chargerImages("./img");
         this.niveaux = Arrays.asList("Facile", "Moyen", "Difficile", "Expert");
@@ -240,7 +240,8 @@ public class Pendu extends Application {
 
     /** lance une partie */
     public void lancePartie(){
-        this.modelePendu = new MotMystere("C:/Users/tagsm/Desktop/Bureau/Pendue/pendu_pour_etu/dictionnaire de mot windows/mot.txt", 3, 10,modelePendu.getNiveau(), 10);
+        this.modelePendu = new MotMystere("/usr/share/dict/french", 3, 10,modelePendu.getNiveau(), 10);//linux
+        //this.modelePendu = new MotMystere("C:/Users/tagsm/Desktop/Bureau/Pendue/pendu_pour_etu/dictionnaire de mot windows/mot.txt", 3, 10,modelePendu.getNiveau(), 10);//windows
         this.dessin= new ImageView(new Image("../img/pendu0.png"));
         this.pg = new ProgressBar();
         this.chrono = new Chronometre();
