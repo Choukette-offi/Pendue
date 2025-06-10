@@ -83,8 +83,8 @@ public class Pendu extends Application {
      */
     @Override
     public void init() {
-        //this.modelePendu = new MotMystere("/usr/share/dict/french", 3, 10, MotMystere.FACILE, 10);//pour linux
-        this.modelePendu = new MotMystere("C:/Users/tagsm/Desktop/Bureau/Pendue/pendu_pour_etu/dictionnaire de mot windows/mot.txt", 3, 10, MotMystere.FACILE, 10);//pour windows
+        this.modelePendu = new MotMystere("/usr/share/dict/french", 3, 10, MotMystere.FACILE, 10);//pour linux
+        //this.modelePendu = new MotMystere("C:/Users/tagsm/Desktop/Bureau/Pendue/pendu_pour_etu/dictionnaire de mot windows/mot.txt", 3, 10, MotMystere.FACILE, 10);//pour windows
         this.lesImages = new ArrayList<Image>();
         this.chargerImages("./img");
         this.niveaux = Arrays.asList("Facile", "Moyen", "Difficile", "Expert");
@@ -205,6 +205,12 @@ public class Pendu extends Application {
         return res;
     }
 
+    private HBox fenetreParametres(){
+        HBox res = new HBox(20);
+        return res;
+
+    }
+
     /**
      * charge les images à afficher en fonction des erreurs
      * @param repertoire répertoire où se trouvent les images
@@ -226,13 +232,13 @@ public class Pendu extends Application {
     }
     
     public void modeParametres(){
-        // A implémenter
+        this.fenetre.setCenter(this.fenetreParametres());
     }
 
     /** lance une partie */
     public void lancePartie(){
-        //this.modelePendu = new MotMystere("/usr/share/dict/french", 3, 10,modelePendu.getNiveau(), 10);//linux
-        this.modelePendu = new MotMystere("C:/Users/tagsm/Desktop/Bureau/Pendue/pendu_pour_etu/dictionnaire de mot windows/mot.txt", 3, 10,modelePendu.getNiveau(), 10);//windows
+        this.modelePendu = new MotMystere("/usr/share/dict/french", 3, 10,modelePendu.getNiveau(), 10);//linux
+        //this.modelePendu = new MotMystere("C:/Users/tagsm/Desktop/Bureau/Pendue/pendu_pour_etu/dictionnaire de mot windows/mot.txt", 3, 10,modelePendu.getNiveau(), 10);//windows
         this.dessin= new ImageView(new Image("../img/pendu0.png"));
         this.pg = new ProgressBar();
         this.chrono = new Chronometre();
