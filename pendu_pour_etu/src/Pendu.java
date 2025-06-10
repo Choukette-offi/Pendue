@@ -83,8 +83,8 @@ public class Pendu extends Application {
      */
     @Override
     public void init() {
-        this.modelePendu = new MotMystere("/usr/share/dict/french", 3, 10, MotMystere.FACILE, 10);//pour linux
-        //this.modelePendu = new MotMystere("C:/Users/tagsm/Desktop/Bureau/Pendue/pendu_pour_etu/dictionnaire de mot windows/mot.txt", 3, 10, MotMystere.FACILE, 10);//pour windows
+        //this.modelePendu = new MotMystere("/usr/share/dict/french", 3, 10, MotMystere.FACILE, 10);//pour linux
+        this.modelePendu = new MotMystere("C:/Users/tagsm/Desktop/Bureau/Pendue/pendu_pour_etu/dictionnaire de mot windows/mot.txt", 3, 10, MotMystere.FACILE, 10);//pour windows
         this.lesImages = new ArrayList<Image>();
         this.chargerImages("./img");
         this.niveaux = Arrays.asList("Facile", "Moyen", "Difficile", "Expert");
@@ -132,6 +132,7 @@ public class Pendu extends Application {
         banniere.setPadding(new Insets(15));
         boutonMaison.setOnAction(new RetourAccueil(this.modelePendu, this));
         boutonInfo.setOnAction(new ControleurInfos(this));
+        boutonParametres.setOnAction(new ControleurParamètre(this.modelePendu, this));
         return banniere;
     }
 
@@ -207,6 +208,8 @@ public class Pendu extends Application {
 
     private HBox fenetreParametres(){
         HBox res = new HBox(20);
+        this.boutonMaison.setDisable(false);
+        this.boutonMaison.setStyle("");
         return res;
 
     }
@@ -237,16 +240,35 @@ public class Pendu extends Application {
 
     /** lance une partie */
     public void lancePartie(){
-        this.modelePendu = new MotMystere("/usr/share/dict/french", 3, 10,modelePendu.getNiveau(), 10);//linux
-        //this.modelePendu = new MotMystere("C:/Users/tagsm/Desktop/Bureau/Pendue/pendu_pour_etu/dictionnaire de mot windows/mot.txt", 3, 10,modelePendu.getNiveau(), 10);//windows
+        this.modelePendu = new MotMystere("C:/Users/tagsm/Desktop/Bureau/Pendue/pendu_pour_etu/dictionnaire de mot windows/mot.txt", 3, 10,modelePendu.getNiveau(), 10);
         this.dessin= new ImageView(new Image("../img/pendu0.png"));
         this.pg = new ProgressBar();
         this.chrono = new Chronometre();
+        this.chrono.setVuePendu(this);  // Associer la vue au chronomètre
         this.clavier= new Clavier("ABCDEFGHIJKLMNOPQRSTUVWXYZ",new ControleurLettres(modelePendu, this), 7);
         this.leNiveau.setText("Niveau "+ niveaux.get(modelePendu.getNiveau()));
         this.pg = new ProgressBar(0);
         motCrypte = new Text(modelePendu.getMotCrypte());
+        this.chrono.start();  // Démarrer le chronomètre
         this.modeJeu();
+    }   
+
+    /**
+     * Action à effectuer lorsque le temps est écoulé
+     * Désactive toutes les touches du clavier et affiche un message de fin de partie
+     */
+        public void tempsEcoule() {
+        Set<String> toutesLettres = new HashSet<>();
+        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        for (char lettre : alphabet.toCharArray()) {
+            toutesLettres.add(String.valueOf(lettre));
+        }
+        this.clavier.desactiveTouches(toutesLettres);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Temps écoulé");
+        alert.setHeaderText("Le temps est écoulé !");
+        alert.setContentText("Vous avez perdu ! Le mot était : " + this.modelePendu.getMotATrouve());
+        alert.showAndWait();
     }
 
     /**

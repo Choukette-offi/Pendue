@@ -36,21 +36,32 @@ public class ControleurLettres implements EventHandler<ActionEvent> {
      */
     @Override
     public void handle(ActionEvent actionEvent) {
+        // Vérifier si le temps n'est pas déjà écoulé
+        if (vuePendu.getChrono().tempsEcoule()) {
+            return; // Ne rien faire si le temps est écoulé
+        }
+        
         Button btn = (Button) actionEvent.getSource();
         String nomDubouton = btn.getText();
         char lettre = nomDubouton.charAt(0);
+        
+        // Remettre le chronomètre à 2 minutes à chaque clic
+        vuePendu.getChrono().resetTime();
+        
         modelePendu.essaiLettre(lettre);
         vuePendu.majAffichage();
+        
         if(modelePendu.gagne()){
-            Optional<ButtonType> reponse = this.vuePendu.popUpMessageGagne().showAndWait(); // on lance la fenêtre popup et on attends la réponse
+            vuePendu.getChrono().stop(); // Arrêter le chronomètre si gagné
+            Optional<ButtonType> reponse = this.vuePendu.popUpMessageGagne().showAndWait();
             System.out.println("Gagné");
         }
         else{
             if(modelePendu.perdu()){
-            Optional<ButtonType> reponse = this.vuePendu.popUpMessagePerdu().showAndWait(); // on lance la fenêtre popup et on attends la réponse
-            System.out.println("Perdu");
-
-        }
+                vuePendu.getChrono().stop(); // Arrêter le chronomètre si perdu
+                Optional<ButtonType> reponse = this.vuePendu.popUpMessagePerdu().showAndWait();
+                System.out.println("Perdu");
+            }
         }
     }
 }

@@ -6,7 +6,6 @@ import javafx.util.Duration;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
-
 /**
  * Permet de gérer un Text associé à une Timeline pour afficher un temps écoulé
  */
@@ -23,14 +22,20 @@ public class Chronometre extends Text{
      * le contrôleur associé au chronomètre
      */
     private ControleurChronometre actionTemps;
+    /**
+     * temps restant en millisecondes
+     */
+    private long tempsRestant = 120_000; // 2 minutes en millisecondes
+    /**
+     * référence vers la vue du jeu pour signaler la fin du temps
+     */
+    private Pendu vuePendu;
 
     /**
      * Constructeur permettant de créer le chronomètre
      * avec un label initialisé à "02:00"
      * Ce constructeur crée la Timeline, la KeyFrame et le contrôleur
      */
-    private long tempsRestant = 120_000; // 2 minutes en millisecondes
-
     public Chronometre(){
         this.setText("02min 00s"); 
         this.setFont(new Font("Arial", 24)); 
@@ -41,6 +46,9 @@ public class Chronometre extends Text{
             if (tempsRestant <= 0) {
                 tempsRestant = 0;
                 this.timeline.stop();
+                if (vuePendu != null) {
+                    vuePendu.tempsEcoule();
+                }
             }
             setTime(tempsRestant);
         });
@@ -58,21 +66,46 @@ public class Chronometre extends Text{
         long secondes = tempsMillisec / 1000;
         long minutes = secondes / 60;
         secondes = secondes % 60;
-            this.setText(minutes + "min" + secondes + "s");
+        this.setText(String.format("%02dmin %02ds", minutes, secondes));
     }
 
     /**
      * Permet de démarrer le chronomètre
      */
     public void start(){
-        this.actionTemps.reset(); // Pour éviter un saut de temps
+        this.timeline.play();
     }
+    
     /**
-     * Permet de remettre le chronomètre à 2 minutes
+     * Permet d'arrêter le chronomètre
+     */
+    public void stop(){
+        this.timeline.stop();
+    }
+    
+    /**
+     * Permet de remettre le chronomètre à 2 minutes et le redémarrer
      */
     public void resetTime(){
         this.timeline.stop();
         this.tempsRestant = 120_000;
         setTime(tempsRestant);
+        this.timeline.play();
+    }
+    
+    /**
+     * Permet d'associer une vue du jeu pour signaler la fin du temps
+     * @param vuePendu la vue du jeu
+     */
+    public void setVuePendu(Pendu vuePendu) {
+        this.vuePendu = vuePendu;
+    }
+    
+    /**
+     * Vérifie si le temps est écoulé
+     * @return true si le temps est écoulé
+     */
+    public boolean tempsEcoule() {
+        return tempsRestant <= 0;
     }
 }

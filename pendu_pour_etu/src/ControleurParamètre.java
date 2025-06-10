@@ -3,6 +3,9 @@ import javafx.event.EventHandler;
 import javafx.scene.control.ButtonType;
 import java.util.Optional;
 import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.CheckBox;
+import javafx.scene.paint.Color;
 
 /**
  * Contrôleur à activer lorsque l'on clique sur le bouton rejouer ou Lancer une partie
@@ -32,6 +35,6 @@ public class ControleurParamètre implements EventHandler<ActionEvent> {
      */
     @Override
     public void handle(ActionEvent actionEvent) {
-         this.vuePendu.modeParametres();
+        this.vuePendu.modeParametres();
     }
 }
